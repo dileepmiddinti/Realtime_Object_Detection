@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Detect — Real-time Object Detection System</title>
+
+  <!-- Custom SVG favicon (no external branding) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2300d4ff'/><rect x='6' y='6' width='8' height='8' rx='1' fill='%23001a20' opacity='0.9'/><rect x='18' y='6' width='8' height='8' rx='1' fill='%23001a20' opacity='0.9'/><rect x='6' y='18' width='8' height='8' rx='1' fill='%23001a20' opacity='0.9'/><rect x='18' y='18' width='8' height='8' rx='1' fill='%23001a20' opacity='0.9'/></svg>" />
+
+  <!-- Google Fonts: Syne (display) + DM Mono (data/code) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <!-- ===================== LANDING PAGE ===================== -->
+  <div id="landing-page" class="landing-page active">
+    <!-- Navigation Bar -->
+    <nav class="landing-nav">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <rect width="14" height="14" rx="2" fill="#00d4ff"/>
+            <rect x="18" width="14" height="14" rx="2" fill="#00d4ff" opacity="0.7"/>
+            <rect y="18" width="14" height="14" rx="2" fill="#00d4ff" opacity="0.6"/>
+            <rect x="18" y="18" width="14" height="14" rx="2" fill="#00d4ff" opacity="0.4"/>
+          </svg>
+          <span class="nav-brand">AI Detect</span>
+        </div>
+        <ul class="nav-menu">
+          <li><a href="#" class="nav-link active">Home</a></li>
+          <li><a href="#" class="nav-link" onclick="goToDashboard()">Detection</a></li>
+          <li><a href="#" class="nav-link">History</a></li>
+          <li><a href="#" class="nav-link">About</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-background">
+        <div class="gradient-circle circle-1"></div>
+        <div class="gradient-circle circle-2"></div>
+        <div class="gradient-orb"></div>
+      </div>
+      
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          Powered by YOLO AI
+        </div>
+
+        <h1 class="hero-title">
+          Real-time Object
+          <span class="accent-text">Detection System</span>
+        </h1>
+
+        <p class="hero-description">
+          Experience cutting-edge AI technology that identifies and tracks objects in images and video streams with exceptional accuracy and speed.
+        </p>
+
+        <div class="hero-buttons">
+          <button class="btn btn-primary" onclick="document.getElementById('dashboard-page').classList.add('active'); document.getElementById('landing-page').classList.remove('active')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            Upload Image
+          </button>
+          <button class="btn btn-secondary" onclick="document.getElementById('dashboard-page').classList.add('active'); document.getElementById('landing-page').classList.remove('active')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <polygon points="23 7 16 12 23 17 23 7"></polygon>
+              <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+            </svg>
+            Start Webcam Detection
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===================== DASHBOARD PAGE ===================== -->
+  <div id="dashboard-page" class="dashboard-page active">
+    <!-- ===================== SIDEBAR ===================== -->
+    <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <rect width="12" height="12" rx="2" fill="var(--accent)"/>
+          <rect x="16" width="12" height="12" rx="2" fill="var(--accent)" opacity="0.6"/>
+          <rect y="16" width="12" height="12" rx="2" fill="var(--accent)" opacity="0.6"/>
+          <rect x="16" y="16" width="12" height="12" rx="2" fill="var(--accent)" opacity="0.3"/>
+        </svg>
+      </div>
+      <span class="logo-text">YOLO<span class="logo-accent">Vision</span></span>
+    </div>
+
+    <!-- Close button for mobile -->
+    <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">✕</button>
+
+    <nav class="sidebar-nav">
+      <p class="nav-label">MAIN</p>
+      <a href="javascript:void(0);" class="nav-item active" data-page="dashboard" onclick="event.preventDefault(); switchPage('dashboard'); closeSidebar();">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </a>
+      <a href="javascript:void(0);" class="nav-item" data-page="history" onclick="event.preventDefault(); switchPage('history'); closeSidebar();">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        History
+      </a>
+      <a href="javascript:void(0);" class="nav-item" data-page="analytics" onclick="event.preventDefault(); switchPage('analytics'); closeSidebar();">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Analytics
+      </a>
+
+      <p class="nav-label" style="margin-top:24px">SYSTEM</p>
+      <a href="javascript:void(0);" class="nav-item" data-page="settings" onclick="event.preventDefault(); switchPage('settings'); closeSidebar();">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 1 0 4.93 19.07 10 10 0 0 0 19.07 4.93z"/></svg>
+        Settings
+      </a>
+    </nav>
+
+    <!-- Sidebar stats -->
+    <div class="sidebar-stats">
+      <div class="stat-pill">
+        <span class="stat-value" id="sidebarTotalDetections">0</span>
+        <span class="stat-label">Detections</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-value" id="sidebarTotalClasses">0</span>
+        <span class="stat-label">Classes</span>
+      </div>
+    </div>
+
+    <div class="sidebar-version">
+      <span class="version-dot"></span> YOLOv8 · v1.0
+    </div>
+  </aside>
+
+  <!-- ===================== MAIN CONTENT ===================== -->
+  <div class="main-wrapper">
+
+    <!-- Top Navbar -->
+    <header class="topbar">
+      <button class="hamburger" id="hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="topbar-title">
+        <span id="pageTitle">Dashboard</span>
+      </div>
+      <div class="topbar-right">
+        <div class="status-badge" id="statusBadge">
+          <span class="status-dot"></span> Ready
+        </div>
+        <button class="icon-btn" title="Documentation">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </button>
+        <div class="avatar">YV</div>
+      </div>
+    </header>
+
+    <!-- =================== PAGE: DASHBOARD =================== -->
+    <main class="page active" id="page-dashboard">
+
+      <!-- Metric Cards Row -->
+      <div class="metrics-row">
+        <div class="metric-card">
+          <div class="metric-icon green">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <div class="metric-body">
+            <span class="metric-value" id="metricDetections">0</span>
+            <span class="metric-label">Total Detections</span>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon cyan">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="metric-body">
+            <span class="metric-value" id="metricClasses">0</span>
+            <span class="metric-label">Unique Classes</span>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon yellow">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <div class="metric-body">
+            <span class="metric-value" id="metricAvgConf">—</span>
+            <span class="metric-label">Avg Confidence</span>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon purple">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <div class="metric-body">
+            <span class="metric-value" id="metricSessions">0</span>
+            <span class="metric-label">Sessions Run</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main detection grid -->
+      <div class="detection-grid">
+
+        <!-- LEFT: Preview + Controls -->
+        <div class="panel preview-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">Detection Preview</h2>
+            <div class="panel-actions">
+              <button class="chip-btn" id="clearPreviewBtn">Clear</button>
+            </div>
+          </div>
+
+          <!-- Action buttons -->
+          <div class="action-row">
+            <!-- Upload Image -->
+            <label class="action-card" for="imageUpload" id="uploadCard">
+              <div class="action-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              </div>
+              <span class="action-label">Upload Image</span>
+              <span class="action-sub">JPG, PNG, WEBP</span>
+              <input type="file" id="imageUpload" accept="image/*" hidden/>
+            </label>
+
+            <!-- Webcam -->
+            <div class="action-card" id="webcamCard">
+              <div class="action-icon webcam-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+              </div>
+              <span class="action-label">Live Webcam</span>
+              <span class="action-sub">Real-time detection</span>
+            </div>
+          </div>
+
+          <!-- Preview area -->
+          <div class="preview-area" id="previewArea">
+            <div class="preview-placeholder" id="previewPlaceholder">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <p>Drop an image or start webcam</p>
+              <span>Supports YOLOv8 real-time detection</span>
+            </div>
+            <!-- Preview image (hidden until upload) -->
+            <img id="previewImage" src="" alt="Detection preview" style="display:none"/>
+            <!-- Webcam video stream -->
+            <video id="webcamFeed" autoplay playsinline style="display:none"></video>
+            <!-- Canvas overlay for bounding boxes -->
+            <canvas id="detectionCanvas"></canvas>
+            <!-- Loading spinner overlay -->
+            <div class="preview-loading" id="previewLoading" style="display:none">
+              <div class="spinner"></div>
+              <span>Running detection...</span>
+            </div>
+          </div>
+
+          <!-- Detect button -->
+          <button type="button" class="detect-btn" id="detectBtn" disabled>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Run Detection
+          </button>
+        </div>
+
+        <!-- RIGHT: Results panel -->
+        <div class="panel results-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">Detected Objects</h2>
+            <span class="results-count" id="resultsCount">0 found</span>
+          </div>
+
+          <!-- Object list -->
+          <div class="object-list" id="objectList">
+            <div class="object-empty">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <p>No objects detected yet</p>
+            </div>
+          </div>
+
+          <!-- Detection log -->
+          <div class="panel-header" style="margin-top:20px; border-top: 1px solid var(--border); padding-top:16px">
+            <h2 class="panel-title">Detection Log</h2>
+          </div>
+          <div class="detection-log" id="detectionLog">
+            <p class="log-empty">Awaiting first detection...</p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- =================== PAGE: HISTORY =================== -->
+    <main class="page" id="page-history">
+      <div class="page-header-row">
+        <div>
+          <h1 class="page-heading">Detection History</h1>
+          <p class="page-sub">All past detections stored in SQLite database</p>
+        </div>
+        <button class="export-btn" id="exportCsvBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export CSV
+        </button>
+      </div>
+
+      <!-- Search + filter -->
+      <div class="history-filters">
+        <input class="filter-input" id="historySearch" type="text" placeholder="Search by object class..." />
+        <select class="filter-select" id="historyFilter">
+          <option value="">All Classes</option>
+        </select>
+        <button class="chip-btn" id="refreshHistoryBtn">↺ Refresh</button>
+      </div>
+
+      <!-- History table -->
+      <div class="table-wrapper">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>Preview</th>
+              <th>Detected Objects</th>
+              <th>Confidence Scores</th>
+              <th>Timestamp</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="historyTableBody">
+            <tr>
+              <td colspan="5" class="table-empty">No detection history yet. Run a detection to see results here.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination" id="pagination"></div>
+    </main>
+
+    <!-- =================== PAGE: ANALYTICS =================== -->
+    <main class="page" id="page-analytics">
+      <div class="page-header-row">
+        <div>
+          <h1 class="page-heading">Analytics</h1>
+          <p class="page-sub">Detection patterns and class distribution</p>
+        </div>
+      </div>
+      <div class="analytics-grid">
+        <div class="panel analytics-panel">
+          <div class="panel-header"><h2 class="panel-title">Class Distribution</h2></div>
+          <canvas id="classChart" height="220"></canvas>
+        </div>
+        <div class="panel analytics-panel">
+          <div class="panel-header"><h2 class="panel-title">Confidence Distribution</h2></div>
+          <canvas id="confChart" height="220"></canvas>
+        </div>
+        <div class="panel analytics-panel wide">
+          <div class="panel-header"><h2 class="panel-title">Detections Over Time</h2></div>
+          <canvas id="timeChart" height="180"></canvas>
+        </div>
+      </div>
+    </main>
+
+    <!-- =================== PAGE: SETTINGS =================== -->
+    <main class="page" id="page-settings">
+      <div class="page-header-row">
+        <div>
+          <h1 class="page-heading">Settings</h1>
+          <p class="page-sub">Configure detection parameters and API</p>
+        </div>
+      </div>
+      <div class="settings-grid">
+        <div class="panel settings-panel">
+          <h3 class="settings-section-title">Detection Config</h3>
+          <div class="setting-row">
+            <div>
+              <label class="setting-label">Confidence Threshold</label>
+              <p class="setting-desc">Minimum confidence to show a detection</p>
+            </div>
+            <div class="setting-control">
+              <input type="range" id="confThreshold" min="0" max="100" value="50" class="slider"/>
+              <span id="confThresholdVal">50%</span>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div>
+              <label class="setting-label">IOU Threshold (NMS)</label>
+              <p class="setting-desc">Non-max suppression overlap threshold</p>
+            </div>
+            <div class="setting-control">
+              <input type="range" id="iouThreshold" min="0" max="100" value="45" class="slider"/>
+              <span id="iouThresholdVal">45%</span>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div>
+              <label class="setting-label">Max Detections</label>
+              <p class="setting-desc">Maximum number of objects to return</p>
+            </div>
+            <div class="setting-control">
+              <input type="number" id="maxDetections" value="100" min="1" max="1000" class="num-input"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel settings-panel">
+          <h3 class="settings-section-title">API Configuration</h3>
+          <div class="setting-row">
+            <div>
+              <label class="setting-label">Backend URL</label>
+              <p class="setting-desc">Flask server address</p>
+            </div>
+            <input type="text" id="backendUrl" value="http://127.0.0.1:5000" class="text-input"/>
+          </div>
+          <div class="setting-row">
+            <div>
+              <label class="setting-label">Model Path</label>
+              <p class="setting-desc">Path to YOLOv8 weights file</p>
+            </div>
+            <input type="text" id="modelPath" value="model/best.pt" class="text-input"/>
+          </div>
+          <button class="detect-btn" id="saveSettingsBtn" style="margin-top:8px; width:auto; padding: 10px 28px">Save Settings</button>
+        </div>
+      </div>
+    </main>
+
+  </div><!-- end .main-wrapper -->
+
+  <!-- Sidebar overlay for mobile -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Toast notifications -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Chart.js for analytics page -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
