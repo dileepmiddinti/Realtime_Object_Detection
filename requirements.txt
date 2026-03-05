@@ -1,9 +1,8 @@
+flask
 gunicorn
-```[(1)](https://render.com/docs/deploy-django)
-
-In the [Render Dashboard](https://dashboard.render.com), set:
-
-**Build Command:**
+ultralytics
+opencv-python-headless
+numpy
 
 
 # YOLO Vision — Python Dependencies
