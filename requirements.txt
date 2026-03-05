@@ -14,3 +14,8 @@ flask-cors>=4.0.0
 # Utilities
 Pillow>=10.0.0
 numpy>=1.24.0
+
+flask
+ultralytics
+opencv-python
+numpy
